@@ -1,8 +1,0 @@
-
-Unpack the  zip file somewhere onto your local file system 
-e.g. under  c:/railix-x-x-x-xxx/ 
-
-Start the  start.bat (Linux start.sh) in the  Railo directory
-
-Now you can contact  the CMF data located under {railix}/webroot on the browser  (http:/localhost:8888) 
-To stop  again use  {railix}/stop.bat, bzw. {railix}/stop.sh . 
