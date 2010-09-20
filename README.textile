@@ -1,2 +1,20 @@
-p. Created by Andrea Campolonghi on 2010-08-18
-Copyright (c) 2010 Railo Technologies. All rights reserved
+h3. Not Supported
+
+h4. Attributes
+
+ * timeidle
+
+h4. Functions
+
+ * cacheCount()
+ * cacheGetAllIds()
+ * cacheGetAll()
+ * cacheGetMetadata()
+ 
+ h4. Getting Started
+ 	
+  * moxi standalone
+ 
+ h4. Important
+ 
+  * Double Serialization 

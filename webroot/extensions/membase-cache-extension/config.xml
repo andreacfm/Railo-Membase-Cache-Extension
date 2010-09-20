@@ -2,12 +2,12 @@
 <config>
 	<info>
 		<id>35979260-BD0B-11DF-851A-0800200C9A66</id>
-		<version>1.201009162141</version>
+		<version>1.201009202157</version>
 		<name>Membase Cache</name>
 		<type>server</type>
 		<label>Membase Cache</label>
 		<description>Membase Cache Extension</description>
-		<created>2010-September-16 21:41</created> 
+		<created>2010-September-20 21:57</created> 
 		<category>Core Extension</category>
 		<author>Andrea Campolonghi</author>
 	</info>

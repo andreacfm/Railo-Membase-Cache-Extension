@@ -1,8 +1,8 @@
 <cfset server.enableCache=true>
 
 <cflock scope="server" timeout="10">
-	<cfset cacheName="mongotest">
-	<cfset cacheRemove(arrayToList(cacheGetAllIds()))>
+	<cfset cacheName="membaseCache">
+	<cfset cacheClear()>
 	<cfset start = getTickCount()>
 	<cfset cachePut('abc','_cachePut',CreateTimeSpan(0,0,0,1))>
 	<cfset cachePut('def','_cachePut',CreateTimeSpan(0,0,0,2),CreateTimeSpan(0,0,0,1))>

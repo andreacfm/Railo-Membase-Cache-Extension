@@ -3,6 +3,7 @@ package railo.extension.io.cache.membase;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Map;
 
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.ConnectionFactoryBuilder;
@@ -12,18 +13,22 @@ import railo.commons.io.cache.Cache;
 import railo.commons.io.cache.CacheEntry;
 import railo.commons.io.cache.CacheEntryFilter;
 import railo.commons.io.cache.CacheKeyFilter;
+import railo.extension.util.Functions;
 import railo.loader.engine.CFMLEngine;
 import railo.loader.engine.CFMLEngineFactory;
+import railo.runtime.exp.PageException;
 import railo.runtime.type.Struct;
 import railo.runtime.util.Cast;
 
 public class MembaseCache implements Cache {
 	
+	private Functions func = new Functions();
 	private MemcachedClient mc;
 	private List<InetSocketAddress> addrs;
 	private String cacheName;
 	private String host;
-
+	
+	
 	@Override
 	public void init(String cacheName, Struct arguments) throws IOException {
 		this.cacheName = cacheName;
@@ -72,7 +77,14 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public CacheEntry getCacheEntry(String key) throws IOException {
-		Object obj = this.mc.get(key);
+		Object obj = this.mc.get(key.toLowerCase());
+		if(obj != null){
+			try{
+				obj = func.evaluate(obj);
+			}catch(PageException e){
+				e.printStackTrace();
+			}	
+		}
 		MembaseCacheEntry entry = new MembaseCacheEntry(new MembaseCacheItem(mc, obj));
 		return entry;
 	}
@@ -91,10 +103,10 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public Object getValue(String key) throws IOException {
-		
 		try{
 			CacheEntry entry = getCacheEntry(key);
 			Object result = entry.getValue();
+			Map stats = this.mc.getStats();
 			return result;
 		}catch(IOException e){
 			throw(e);
@@ -106,6 +118,9 @@ public class MembaseCache implements Cache {
 	public Object getValue(String key, Object defaultValue) {
 		try{
 			Object result = getValue(key);
+			if(result == null){
+				return defaultValue;
+			}
 			return result;
 		}catch(IOException e){
 			e.printStackTrace();
@@ -145,24 +160,41 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public void put(String key, Object value, Long idleTime, Long lifeSpan) {
+		Object obj = null;
 		int span = lifeSpan==null?0:lifeSpan.intValue();
-		this.mc.add(key.toLowerCase(),span,value);
+		try{
+			obj = func.serialize(value);			
+		}
+		catch(PageException e){
+			e.printStackTrace();
+		}
+		this.mc.add(key.toLowerCase(),span,obj);
 	}
 
 	@Override
 	public boolean remove(String key) {
-		this.mc.delete(key);
+		this.mc.delete(key.toLowerCase());
 		return false;
 	}
 
 	@Override
 	public int remove(CacheKeyFilter filter) {
 		
+		// Does not really test nothing here. Just flush the whole cache.
+		// Memcached does not yes support the keys listing so is not possible to iterate
+		
+		this.mc.flush();
+		
 		return 0;
 	}
 
 	@Override
 	public int remove(CacheEntryFilter arg0) {
+
+		// Does not really test nothing here. Just flush the whole cache.
+		// Memcached does not yes support the keys listing so is not possible to iterate
+		
+		this.mc.flush();
 		
 		return 0;
 	}

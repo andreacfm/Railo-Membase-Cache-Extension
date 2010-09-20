@@ -36,6 +36,8 @@
 	my.Mixed = CacheGet("mixed");
 	my.Obj = CacheGet("obj");
 	
+	dump(my);
+	
 </cfscript>
 
 
