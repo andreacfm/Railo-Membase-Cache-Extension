@@ -24,3 +24,4 @@ webroot/extensions/unames.xml
 *.classpath
 /.settings
 *.classpath
+*.project
