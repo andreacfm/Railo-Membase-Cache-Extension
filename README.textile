@@ -10,11 +10,11 @@ h4. Functions
  * cacheGetAllIds()
  * cacheGetAll()
  * cacheGetMetadata()
- 
- h4. Getting Started
+
+h3. Getting Started
  	
-  * moxi standalone
+ * moxi standalone
+
+h3. Important
  
- h4. Important
- 
-  * Double Serialization 
+ * Double Serialization 

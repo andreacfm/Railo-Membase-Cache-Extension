@@ -23,3 +23,4 @@ webroot/extensions/unames.xml
 *.DS_Store
 *.classpath
 /.settings
+*.classpath
