@@ -2,6 +2,7 @@ package railo.extension.io.cache.membase;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +38,8 @@ public class MembaseCache implements Cache {
 
 	    try {
 	    	this.host = caster.toString(arguments.get("host"));   
-	    	List<InetSocketAddress> addrs = AddrUtil.getAddresses(this.host);
-        	this.mc = new MemcachedClient(new ConnectionFactoryBuilder().setProtocol(ConnectionFactoryBuilder.Protocol.TEXT).build(),addrs);                        
+	    	this.addrs = AddrUtil.getAddresses(this.host);
+        	this.mc = new MemcachedClient(new ConnectionFactoryBuilder().setProtocol(ConnectionFactoryBuilder.Protocol.TEXT).build(),this.addrs);                        
        
 	    } catch (Exception e) {
             e.printStackTrace();
@@ -46,6 +47,14 @@ public class MembaseCache implements Cache {
 
 	}
 	
+	public List<InetSocketAddress> getAddresses(){
+		return this.addrs;
+	}
+
+	public MemcachedClient getMC(){
+		return this.mc;
+	}
+
 	@Override
 	public boolean contains(String key) {
 		try{
@@ -85,7 +94,7 @@ public class MembaseCache implements Cache {
 				e.printStackTrace();
 			}	
 		}
-		MembaseCacheEntry entry = new MembaseCacheEntry(new MembaseCacheItem(mc, obj));
+		MembaseCacheEntry entry = new MembaseCacheEntry(new MembaseCacheItem(this,key,obj));
 		return entry;
 	}
 
@@ -97,8 +106,15 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public Struct getCustomInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		CFMLEngine engine = CFMLEngineFactory.getInstance();
+		Cast caster = engine.getCastUtil();
+		Struct res = null;		
+		try{
+			res = caster.toStruct(this.mc.getStats());	
+		}catch(PageException e){
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	@Override
@@ -130,8 +146,10 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public long hitCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		Map<SocketAddress,Map<String,String>> stats = this.mc.getStats();
+		SocketAddress add = this.addrs.get(0);
+	    long hits = Long.parseLong(stats.get(add).get("get_hits"));
+		return hits;
 	}
 
 	@Override
@@ -154,8 +172,10 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public long missCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		Map<SocketAddress,Map<String,String>> stats = this.mc.getStats();
+		SocketAddress add = this.addrs.get(0);
+	    long misses = Long.parseLong(stats.get(add).get("get_misses"));
+		return misses;
 	}
 
 	@Override

@@ -1,9 +1,17 @@
 package railo.extension.io.cache.membase;
 
+import java.net.SocketAddress;
 import java.util.Date;
+import java.util.Map;
+
+import net.spy.memcached.MemcachedClient;
 
 import railo.commons.io.cache.CacheEntry;
+import railo.loader.engine.CFMLEngine;
+import railo.loader.engine.CFMLEngineFactory;
+import railo.runtime.exp.PageException;
 import railo.runtime.type.Struct;
+import railo.runtime.util.Cast;
 
 public class MembaseCacheEntry implements CacheEntry {
 	
@@ -21,14 +29,20 @@ public class MembaseCacheEntry implements CacheEntry {
 
 	@Override
 	public Struct getCustomInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		CFMLEngine engine = CFMLEngineFactory.getInstance();
+		Cast caster = engine.getCastUtil();		
+		Struct res = null;
+		try{
+			res = caster.toStruct(this.item.getMc().getStats(this.item.getKey()));
+		}catch(PageException e){
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.item.getKey();
 	}
 
 	@Override
@@ -38,8 +52,18 @@ public class MembaseCacheEntry implements CacheEntry {
 
 	@Override
 	public int hitCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		int hits = 0;
+		
+		MemcachedClient mc = this.item.getMc();
+		Map<SocketAddress,Map<String,String>> stats = mc.getStats(this.item.getKey());
+		SocketAddress add = this.item.getAddresses().get(0);
+	
+		String hitsValue = stats.get(add).get("get_hits");
+		
+		if(hitsValue != null){
+		    hits = Integer.parseInt(hitsValue);			
+		}
+		return hits;
 	}
 
 	@Override

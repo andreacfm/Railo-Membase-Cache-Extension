@@ -1,3 +1,6 @@
+<cfset cachePut('abc','123')>
+<cfdump var="#cacheGetMetadata('abc')#">
+
 <!--- <cflock scope="server" timeout="1">
 	<cfset cacheRemove(arrayToList(cacheGetAllIds()))>	
 	<cfset cachePut('abc','123')>
