@@ -110,7 +110,7 @@ public class MembaseCache implements Cache {
 		Cast caster = engine.getCastUtil();
 		Struct res = null;		
 		try{
-			res = caster.toStruct(this.mc.getStats());	
+			res = caster.toStruct(this.mc.getStats().get(this.addrs.get(0)));	
 		}catch(PageException e){
 			e.printStackTrace();
 		}

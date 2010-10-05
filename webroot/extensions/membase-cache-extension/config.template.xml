@@ -10,6 +10,10 @@
 		<created>{created}</created> 
 		<category>Core Extension</category>
 		<author>Andrea Campolonghi</author>
+		<image>http://preview.getrailo.org/logos/membase-logo.png</image>
+		<mailinglist>http://groups.google.com/group/railo-beta</mailinglist>
+		<support>http://groups.google.com/group/railo-beta</support>
+		<documentation>http://wiki.getrailo.com/wiki/extensions:membase</documentation>		
 	</info>
 </config>
 

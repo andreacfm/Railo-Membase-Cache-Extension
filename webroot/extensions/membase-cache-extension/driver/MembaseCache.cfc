@@ -1,10 +1,10 @@
 <cfcomponent extends="Cache">
     <cfset fields=array(
-			field(	displayName="Server Host",
+			field(	displayName="Membase Server Host",
 					name="host",
 					defaultValue="localhost:11211",
 					required=true,
-					description="Local moxi server host and port. Ex: localhost:11211 ",
+					description="membase server moxi (or standalone install)  host and port. Ex: localhost:11211",
 					type="text"
 				)		
 	)>

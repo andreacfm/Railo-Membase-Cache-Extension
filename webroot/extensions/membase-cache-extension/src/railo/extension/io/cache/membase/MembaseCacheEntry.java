@@ -33,7 +33,7 @@ public class MembaseCacheEntry implements CacheEntry {
 		Cast caster = engine.getCastUtil();		
 		Struct res = null;
 		try{
-			res = caster.toStruct(this.item.getMc().getStats(this.item.getKey()));
+			res = caster.toStruct(this.item.getMc().getStats(this.item.getKey()).get(this.item.getAddresses().get(0)));
 		}catch(PageException e){
 			e.printStackTrace();
 		}
