@@ -5,6 +5,12 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.log4j.Logger;
 
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.ConnectionFactoryBuilder;
@@ -17,6 +23,7 @@ import railo.commons.io.cache.CacheKeyFilter;
 import railo.extension.util.Functions;
 import railo.loader.engine.CFMLEngine;
 import railo.loader.engine.CFMLEngineFactory;
+import railo.runtime.config.Config;
 import railo.runtime.exp.PageException;
 import railo.runtime.type.Struct;
 import railo.runtime.util.Cast;
@@ -28,6 +35,7 @@ public class MembaseCache implements Cache {
 	private List<InetSocketAddress> addrs;
 	private String cacheName;
 	private String host;
+	private Logger log = Logger.getLogger(MemcachedClient.class);
 	
 	
 	@Override
@@ -45,6 +53,10 @@ public class MembaseCache implements Cache {
             e.printStackTrace();
         }		
 
+	}
+	
+	public void init(Config config ,String[] cacheName,Struct[] arguments){
+		//Not used at the moment
 	}
 	
 	public List<InetSocketAddress> getAddresses(){
@@ -68,39 +80,67 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public List entries() {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [entries] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List entries(CacheKeyFilter arg0) {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [entries] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List entries(CacheEntryFilter arg0) {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [entries] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public CacheEntry getCacheEntry(String key) throws IOException {
-		Object obj = this.mc.get(key.toLowerCase());
-		if(obj != null){
-			try{
+		
+		Object obj=null;
+		
+		//try to get the key for max 5 sec
+		Future<Object> f = this.mc.asyncGet(key.toLowerCase());
+			try{		    
+				obj = f.get(5, TimeUnit.SECONDS);
 				obj = func.evaluate(obj);
-			}catch(PageException e){
-				e.printStackTrace();
-			}	
-		}
-		MembaseCacheEntry entry = new MembaseCacheEntry(new MembaseCacheItem(this,key,obj));
-		return entry;
+				MembaseCacheEntry entry = new MembaseCacheEntry(new MembaseCacheItem(this,key,obj));
+				return entry;
+
+				}catch(PageException e){
+					f.cancel(false);
+				}catch(TimeoutException e) {
+					f.cancel(false);				
+				}catch(InterruptedException e){
+					f.cancel(false);
+				}catch(ExecutionException e){
+					f.cancel(false);
+			}
+				
+		return null;		
 	}
 
 	@Override
-	public CacheEntry getCacheEntry(String arg0, CacheEntry arg1) {
-		// TODO Auto-generated method stub
+	public CacheEntry getCacheEntry(String key, CacheEntry filter) {
+		try{
+			throw(new IOException("The method [getCacheEntry(String,CacheEntry)] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -154,19 +194,31 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public List keys() {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [keys] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List keys(CacheKeyFilter arg0) {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [keys] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List keys(CacheEntryFilter arg0) {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [keys] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -221,19 +273,31 @@ public class MembaseCache implements Cache {
 
 	@Override
 	public List values() {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [values] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List values(CacheKeyFilter arg0) {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [values] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List values(CacheEntryFilter arg0) {
-		// TODO Auto-generated method stub
+		try{
+			throw(new IOException("The method [values] is not supported in Membase Cache"));			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 

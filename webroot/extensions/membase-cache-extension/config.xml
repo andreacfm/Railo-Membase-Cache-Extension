@@ -2,12 +2,12 @@
 <config>
 	<info>
 		<id>35979260-BD0B-11DF-851A-0800200C9A66</id>
-		<version>0.1.201010052053</version>
+		<version>0.5.201010272118</version>
 		<name>Membase Cache</name>
 		<type>server</type>
 		<label>Membase Cache</label>
 		<description>Membase Cache Extension</description>
-		<created>2010-October-5 20:53</created> 
+		<created>2010-October-27 21:18</created> 
 		<category>Core Extension</category>
 		<author>Andrea Campolonghi</author>
 		<image>http://preview.getrailo.org/logos/membase-logo.png</image>
