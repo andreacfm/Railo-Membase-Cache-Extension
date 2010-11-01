@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import net.spy.memcached.AddrUtil;
@@ -37,18 +38,21 @@ public class MembaseCache implements Cache {
 	private String host;
 	private Logger log = Logger.getLogger(MemcachedClient.class);
 	
-	
 	@Override
 	public void init(String cacheName, Struct arguments) throws IOException {
 		this.cacheName = cacheName;
 		CFMLEngine engine = CFMLEngineFactory.getInstance();
 		Cast caster = engine.getCastUtil();
-
+		
+		log.setLevel(Level.INFO);
+		
 	    try {
 	    	this.host = caster.toString(arguments.get("host"));   
 	    	this.addrs = AddrUtil.getAddresses(this.host);
         	this.mc = new MemcachedClient(new ConnectionFactoryBuilder().setProtocol(ConnectionFactoryBuilder.Protocol.TEXT).build(),this.addrs);                        
-       
+        	
+        	log.info("Cache id : " + cacheName + " initilized using the Membase Driver");
+        	
 	    } catch (Exception e) {
             e.printStackTrace();
         }		
@@ -240,7 +244,7 @@ public class MembaseCache implements Cache {
 		catch(PageException e){
 			e.printStackTrace();
 		}
-		this.mc.add(key.toLowerCase(),span,obj);
+		this.mc.set(key.toLowerCase(),span,obj);
 	}
 
 	@Override
