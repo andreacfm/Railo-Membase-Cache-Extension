@@ -3,9 +3,9 @@
 	<cfscript>
 		variables.name = "Membase Cache";
 		variables.id = "railo.extension.io.cache.membase.MembaseCache";
-		variables.jar = "membase-cache.jar"
-		variables.driver = "MembaseCache.cfc"
-		variables.jars = "#variables.jar#,memcached.jar,memcached-java-driver.txt";
+		variables.jar = "membase-cache.jar";
+		variables.driver = "MembaseCache.cfc";
+		variables.jars = "#variables.jar#,memcached.jar,apache-logging-log4j.jar,memcached-java-driver.txt";
 	</cfscript>
     
     <cffunction name="validate" returntype="void" output="no"
@@ -23,12 +23,6 @@
         <cfargument name="path" type="string">
         <cfargument name="config" type="struct">
         
-        <cfif server.railo.version LT "3.1.1.017">
-        	<cfset error.common="to install this extension you need at least Railo version [3.1.1.017], the current version is [#server.railo.version#]">
-        <cfelseif hasExtension(variables.id)>
-        	<cfset error.common="You already have ""#variables.name#"" installed">
-		</cfif>
-
 		<cfloop list="#variables.jars#" index="i">
 			<cfadmin 
             	action="updateJar"

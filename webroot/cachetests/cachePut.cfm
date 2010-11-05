@@ -26,6 +26,20 @@
     <cf_valueEquals left="#structKeyExists(variables,'e')#" right="false">
     <cf_valueEquals left="#structKeyExists(variables,'f')#" right="true">
     
+    
+    <cfset a = []>
+	<cfset ArrayAppend(a,"one")>
+	<cfset cachePut("test_array",a,CreateTimeSpan(0,0,10,0),CreateTimeSpan(0,0,10,0))>
+	<cfset one = cacheGet("test_array")>
+	<cf_valueEquals left="#arraylen(one)#" right="1">
+	
+	<cfset ArrayAppend(a,"two")>
+	<cfset cachePut("test_array",a,CreateTimeSpan(0,0,10,0),CreateTimeSpan(0,0,10,0))>
+	<cfset two = cacheGet("test_array")>
+	<cf_valueEquals left="#arraylen(two)#" right="2">
+
+    
+    
 <cfif server.ColdFusion.ProductName EQ "railo">    
 	<cfset cachePut('def','123',CreateTimeSpan(0,0,0,2),CreateTimeSpan(0,0,0,1),cacheName)>
 </cfif>

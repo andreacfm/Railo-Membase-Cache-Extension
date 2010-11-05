@@ -18,7 +18,6 @@
     
 	<cffunction name="populateCOM" access="private" returntype="void">
     	<cfargument name="apps" type="query" required="yes">
-        <cfset var exp="this extension is experimental and will no longer work with the final release of railo 3.1, it is not allowed to use this extension in a productve enviroment.">
         
         <cfset var rootURL=getInfo().url & "/extensions/">
         <cfset var zipFileLocation = 'ext/membase-cache.zip'>

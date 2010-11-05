@@ -16,6 +16,7 @@ webroot/WEB-INF/
 webroot/extensions/ext/*.zip
 webroot/extensions/output/*.*
 webroot/extensions/unames.xml
+src/
 
 #extensions
 *.project
