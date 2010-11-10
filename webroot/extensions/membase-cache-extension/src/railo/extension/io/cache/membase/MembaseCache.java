@@ -121,21 +121,27 @@ public class MembaseCache implements Cache {
 		Future<Object> f = this.mc.asyncGet(key.toLowerCase());
 			try{		    
 				obj = f.get(5, TimeUnit.SECONDS);
+				if(obj == null){
+					throw(new IOException("Key [" + key + "] was not found"));
+				}
 				obj = func.evaluate(obj);
 				MembaseCacheEntry entry = new MembaseCacheEntry(new MembaseCacheItem(this,key,obj));
 				return entry;
 
 				}catch(PageException e){
 					f.cancel(false);
+					throw(new IOException(e.getMessage()));
 				}catch(TimeoutException e) {
-					f.cancel(false);				
+					f.cancel(false);
+					throw(new IOException(e.getMessage()));
 				}catch(InterruptedException e){
 					f.cancel(false);
+					throw(new IOException(e.getMessage()));
 				}catch(ExecutionException e){
 					f.cancel(false);
+					throw(new IOException(e.getMessage()));
 			}
 				
-		return null;		
 	}
 
 	@Override
