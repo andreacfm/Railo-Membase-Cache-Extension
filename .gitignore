@@ -17,6 +17,8 @@ webroot/extensions/ext/*.zip
 webroot/extensions/output/*.*
 webroot/extensions/unames.xml
 src/
+webroot/extensions/membase-cache-extension/bin/
+webroot/extensions/ext/
 
 #extensions
 *.project

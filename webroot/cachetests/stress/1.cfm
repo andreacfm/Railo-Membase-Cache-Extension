@@ -1,22 +1,21 @@
 <cfsetting requesttimeout="180">
 
-<cffunction name="getObject" returntype="any">
-	<cfreturn {key = arguments.value}>
-</cffunction>
+<cfset total = 0>
 
-<cfset start = gettickcount()>
-<cfloop from="1" to="1000" index="i">
-	<cfcache action="put" id="#i#" value="#getObject(value = i)#">
-	<cfcache action="get" id="#i#" name="v">
-</cfloop>
-<cfset end = gettickcount()>
+<cfloop from="1" to="10" index="j">
+	<cfset start = gettickcount()>
+	<cfloop from="1" to="1000" index="i">
+		<cfcache action="put" id="a#i#" value="#i#">
+		<cfcache action="get" id="a#i#" name="v">
+		<cfcache action="put" id="b#i#" value="#{value = i}#">
+		<cfcache action="get" id="b#i#" name="v">
+	</cfloop>
+	<cfset end = gettickcount()>
 
-<cfoutput>#end - start# millis</cfoutput>
-
-<cfset cacheClear() >
-
-<cfloop from="1" to="40" index="i">
-	<cfhttp url="http://localhost:8888/cachetests/" result="res">
-	<cfoutput> <br>- #res.status_code#</cfoutput>
+	<cfset time = end -start>
+	<cfset total = total + time >
+	<cfoutput>#time# millis<br/></cfoutput>
 	<cfflush>
 </cfloop>
+
+<cfoutput>Average : #total/10#</cfoutput>

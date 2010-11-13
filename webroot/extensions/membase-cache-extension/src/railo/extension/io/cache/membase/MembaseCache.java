@@ -243,14 +243,16 @@ public class MembaseCache implements Cache {
 	@Override
 	public void put(String key, Object value, Long idleTime, Long lifeSpan) {
 		Object obj = null;
-		int span = lifeSpan==null?0:lifeSpan.intValue();
+		long span = lifeSpan==null?0:lifeSpan;
+		int seconds = (int)TimeUnit.MILLISECONDS.toSeconds(span);
+		
 		try{
 			obj = func.serialize(value);			
 		}
 		catch(PageException e){
 			e.printStackTrace();
 		}
-		this.mc.set(key.toLowerCase(),span,obj);
+		this.mc.set(key.toLowerCase(),seconds,obj);
 	}
 
 	@Override
