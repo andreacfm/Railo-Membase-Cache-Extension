@@ -28,3 +28,5 @@ webroot/extensions/ext/
 /.settings
 *.classpath
 *.project
+*.iml
+/.idea

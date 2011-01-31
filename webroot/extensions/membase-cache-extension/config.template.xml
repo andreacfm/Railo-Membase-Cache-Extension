@@ -4,7 +4,7 @@
 		<id>35979260-BD0B-11DF-851A-0800200C9A66</id>
 		<version>{version}</version>
 		<name>Membase Cache</name>
-		<type>server</type>
+		<type>all</type>
 		<label>Membase Cache</label>
 		<description>Membase Cache Extension</description>
 		<created>{created}</created> 

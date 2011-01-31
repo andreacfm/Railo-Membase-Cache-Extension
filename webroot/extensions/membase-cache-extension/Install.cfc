@@ -22,22 +22,18 @@
     	<cfargument name="error" type="struct">
         <cfargument name="path" type="string">
         <cfargument name="config" type="struct">
-        
-		<cfloop list="#variables.jars#" index="i">
-			<cfadmin 
-            	action="updateJar"
-            	type="#request.adminType#"
-            	password="#session["password"&request.adminType]#"    
-            	jar="#path#lib/#i#">
-		</cfloop>
-            
 
-        <cfadmin 
-        	action="updateContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            source="#path#driver/#variables.driver#"
-            destination="admin/cdriver/#variables.driver#">
+		<cfloop list="#variables.jars#" index="i">
+            <cffile
+            action="copy"
+            source="#path#lib/#i#"
+            destination="#getContextPath()#/lib/#i#">
+		</cfloop>
+
+		<cffile
+		action="copy"
+		source="#path#driver/#variables.driver#"
+		destination="#getContextPath()#/context/admin/cdriver/#variables.driver#">
 
         <cfreturn '#variables.name# is now successfully installed'>
     
@@ -71,7 +67,12 @@
             type="#request.adminType#"
             password="#session["password"&request.adminType]#"
             destination="admin/cdriver/#variables.driver#">
-        
+
+
+        <cffile
+        action="delete"
+        file="#getContextPath()#/context/admin/cdriver/#variables.driver#">
+
         <cfreturn '#variables.name# is now successfully removed'>
 		
     </cffunction>
@@ -91,5 +92,19 @@
          </cfloop>
          <cfreturn false>
     </cffunction>
+
+    <cffunction name="getContextPath" access="private" returntype="string">
+
+        <cfswitch expression="#request.adminType#">
+            <cfcase value="web">
+                <cfreturn expandPath('{railo-web}') />
+            </cfcase>
+            <cfcase value="server">
+                <cfreturn expandPath('{railo-server}') />
+            </cfcase>
+        </cfswitch>
+
+    </cffunction>
+
         
 </cfcomponent>
