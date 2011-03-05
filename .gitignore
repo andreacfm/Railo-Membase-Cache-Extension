@@ -1,24 +1,9 @@
 #project
-License.txt
-install.txt
-agent/
-bin/
-contexts/
-etc/
-/lib/
-patches/
-server.xml
-start
-start.jar
-stop
-LICENSES/
-webroot/WEB-INF/
-webroot/extensions/ext/*.zip
-webroot/extensions/output/*.*
-webroot/extensions/unames.xml
-src/
-webroot/extensions/membase-cache-extension/bin/
-webroot/extensions/ext/
+ext/*.zip
+extension/output/*.*
+extension/bin/
+test.cfm
+WEB-INF/
 
 #extensions
 *.project
@@ -30,3 +15,4 @@ webroot/extensions/ext/
 *.project
 *.iml
 /.idea
+

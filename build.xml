@@ -14,7 +14,7 @@
 	
 	<!-- Tests -->
 	<target name="runtests" depends="updateExtension">
-		<get src="http://localhost:8888/cachetests/index.cfm" dest="output/results.html" ignoreerrors="true" />
+		<get src="http://localhost:8080/cachetests/index.cfm" dest="output/results.html" ignoreerrors="true" />
 	</target>
 	
 	<!-- Upload Extension to the local webserver -->
@@ -24,11 +24,11 @@
 
 	
 	<target name="updateExtension" depends="compressExtension">
-		<get src="http://localhost:8888/extensions/reload.cfm" dest="output/output.html" ignoreerrors="true" />
+		<get src="http://localhost:8080/reload.cfm" dest="output/output.html" ignoreerrors="true" />
 	</target>
 	
 	<target name="compressExtension" depends="replaceConfigVars">
-		<zip destfile="ext/membase-cache.zip" basedir="${project.extPath}">
+		<zip destfile="ext/membase-cache.zip" basedir="extension/">
 			<exclude name="**/src/**"/>
 			<exclude name="**/bin/**"/>			
 		</zip>
@@ -36,38 +36,41 @@
 	
 
 	<target name="replaceConfigVars" depends="copyLibs">
-		<copy file="${project.extPath}/config.template.xml" tofile="${project.extPath}/config.xml" overwrite="true" />
-		<replace file="${project.extPath}/config.xml" token="{version}" value="${version}.${stamp.DSTAMP}${stamp.TSTAMP}" />
-		<replace file="${project.extPath}/config.xml" token="{created}" value="${created.TODAY} ${created.TSTAMP}" />
+		<copy file="extension/config.template.xml" tofile="extension/config.xml" overwrite="true" />
+		<replace file="extension/config.xml" token="{version}" value="${version}.${stamp.DSTAMP}${stamp.TSTAMP}" />
+		<replace file="extension/config.xml" token="{created}" value="${created.TODAY} ${created.TSTAMP}" />
 	</target>
 	
 	<target name="copyLibs" depends="createJar">
-		<copy todir="${project.extPath}/lib/">
+		<copy todir="extension/lib/">
 		    <fileset dir="lib/"/>
 		</copy>
 	</target>
 	
 	<target name="createJar" depends="deleteArchives">
 		<path id="master-classpath">
-			<fileset dir="../../lib">
+			<fileset dir="../../railo/">
 				<include name="*.jar"/>
 			 </fileset>
+            <fileset dir="../../lib/">
+                <include name="*.jar"/>
+             </fileset>
 			 <fileset dir="lib/">
 			    <include name="*.jar"/>
 			  </fileset>	
 		</path>
-		<javac srcdir="${project.extPath}/src" destdir="${project.extPath}/bin">
+		<javac srcdir="extension/src" destdir="extension/bin">
 			 <classpath refid="master-classpath"/>
 		</javac>
-		<jar basedir="${project.extPath}/bin" destfile="${project.extPath}/lib/membase-cache.jar" />
+		<jar basedir="extension/bin" destfile="extension/lib/membase-cache.jar" />
 	</target>
 	
 	<target name="deleteArchives">
-		<delete dir="${project.extPath}/lib/" includes="*.jar" />
+		<delete dir="extension/lib/" includes="*.jar" />
 		<delete dir="ext/" includes="*.zip"/>
 		<delete dir="output/" includes="*.html"/>
-		<delete file="${project.extPath}/config.xml" />
-		<mkdir dir="${project.extPath}/lib/" />
+		<delete file="extension/config.xml" />
+		<mkdir dir="extension/lib/" />
 	</target>
 
 </project>
