@@ -23,9 +23,22 @@
 	</target>
 
 	
-	<target name="updateExtension" depends="compressExtension">
-		<get src="http://localhost:8080/reload.cfm" dest="output/output.html" ignoreerrors="true" />
-	</target>
+    <target name="updateExtension" depends="compressExtension">
+
+         <echo message="Deploying new lib"/>
+         <copy todir="${context_path}/lib" overwrite="true">
+             <fileset dir="${project.extPath}/lib" includes="*jar"/>
+         </copy>
+
+         <echo message="Deploying new driver"/>
+         <copy todir="${context_path}/context/admin/cdriver/" overwrite="true">
+             <fileset dir="${project.extPath}/driver" includes="*cfc"/>
+         </copy>
+
+
+         <echo message="restart railo"/>
+        <get src="http://localhost:8888/reload.cfm" dest="output/output.html" ignoreerrors="true" />
+    </target>
 	
 	<target name="compressExtension" depends="replaceConfigVars">
 		<zip destfile="ext/membase-cache.zip" basedir="extension/">
@@ -36,7 +49,7 @@
 	
 
 	<target name="replaceConfigVars" depends="copyLibs">
-		<copy file="extension/config.template.xml" tofile="extension/config.xml" overwrite="true" />
+		<copy file="${project.extPath}/config.template.xml" tofile="${project.extPath}/config.xml" overwrite="true" />
 		<replace file="extension/config.xml" token="{version}" value="${version}.${stamp.DSTAMP}${stamp.TSTAMP}" />
 		<replace file="extension/config.xml" token="{created}" value="${created.TODAY} ${created.TSTAMP}" />
 	</target>
@@ -59,18 +72,18 @@
 			    <include name="*.jar"/>
 			  </fileset>	
 		</path>
-		<javac srcdir="extension/src" destdir="extension/bin">
+		<javac srcdir="${project.extPath}/src" destdir="${project.extPath}/bin">
 			 <classpath refid="master-classpath"/>
 		</javac>
-		<jar basedir="extension/bin" destfile="extension/lib/membase-cache.jar" />
+		<jar basedir="${project.extPath}/bin" destfile="${project.extPath}/lib/membase-cache.jar" />
 	</target>
 	
 	<target name="deleteArchives">
-		<delete dir="extension/lib/" includes="*.jar" />
+		<delete dir="${project.extPath}/lib/" includes="*.jar" />
 		<delete dir="ext/" includes="*.zip"/>
 		<delete dir="output/" includes="*.html"/>
-		<delete file="extension/config.xml" />
-		<mkdir dir="extension/lib/" />
+		<delete file="${project.extPath}/config.xml" />
+		<mkdir dir="${project.extPath}/lib/" />
 	</target>
 
 </project>
