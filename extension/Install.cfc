@@ -69,10 +69,6 @@
             destination="admin/cdriver/#variables.driver#">
 
 
-        <cffile
-        action="delete"
-        file="#getContextPath()#/context/admin/cdriver/#variables.driver#">
-
         <cfreturn '#variables.name# is now successfully removed'>
 		
     </cffunction>
