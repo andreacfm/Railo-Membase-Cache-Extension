@@ -175,7 +175,8 @@ public class MembaseCache implements Cache {
 			Map stats = this.mc.getStats();
 			return result;
 		}catch(IOException e){
-			throw(e);
+            e.printStackTrace();
+            return null;
 		}
 		
 	}
